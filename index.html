@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Olympian · Disparo em Massa via WhatsApp API Oficial</title>
+<meta name="description" content="A Olympian coloca sua promoção direto no WhatsApp de quem já comprou de você — pela API Oficial da Meta, sem risco de bloqueio. A partir de R$ 0,14 por mensagem.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #128C45;
+    --accent-dark: #0B6B33;
+    --bg: #FAF9F3;
+    --bg-alt: #F3F1E7;
+    --ink: #191A14;
+    --ink-mid: #5C5B4E;
+    --ink-muted: #8C8A78;
+    --border: #E4E2D6;
+    --white: #FFFFFF;
+    --chat-bg: #EFEAE2;
+    --chat-border: #E0DCD0;
+    --bubble-out: #D6F5C6;
+    --bubble-out-ink: #24371B;
+    --accent-tint: #E8F5EC;
+    --accent-border: #D5EDDF;
+    --error: #B4540A;
+    --pad-x: clamp(20px, 5vw, 72px);
+    --pad-y: clamp(56px, 9vh, 110px);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Bricolage Grotesque', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { color: var(--accent-dark); }
+  ::selection { background: var(--accent); color: var(--bg); }
+  input, select, button { font-family: 'Bricolage Grotesque', sans-serif; }
+  input:focus, select:focus { outline: 2px solid var(--accent); outline-offset: 0; border-color: var(--accent) !important; }
+
+  .mono {
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  /* ANIMATIONS */
+  @keyframes riseIn {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes bubbleIn {
+    from { opacity: 0; transform: translateY(10px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes tickerMove {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* NAV */
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 18px var(--pad-x);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 100;
+  }
+  .nav-brand {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .nav-wordmark {
+    font-weight: 800;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  .nav-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-muted);
+    letter-spacing: 0.08em;
+  }
+  .btn-nav {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--bg);
+    background: var(--accent);
+    padding: 10px 20px;
+    border-radius: 2px;
+    letter-spacing: 0.04em;
+    transition: background 0.15s;
+  }
+  .btn-nav:hover { background: var(--accent-dark); color: var(--bg); }
+
+  /* HERO */
+  .hero {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+    gap: clamp(32px, 5vw, 80px);
+    padding: clamp(48px, 8vh, 96px) var(--pad-x) clamp(48px, 8vh, 88px);
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-text {
+    animation: riseIn 0.7s ease-out both;
+  }
+  .label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 0.14em;
+    margin-bottom: 24px;
+  }
+  .hero-h1 {
+    font-size: clamp(33px, 5vw, 72px);
+    line-height: 1.0;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 28px;
+  }
+  .hero-h1 em {
+    color: var(--accent);
+    font-style: normal;
+  }
+  .hero-p {
+    font-size: clamp(17px, 1.4vw, 20px);
+    line-height: 1.55;
+    color: var(--ink-mid);
+    max-width: 54ch;
+    margin-bottom: 36px;
+    font-weight: 300;
+  }
+  .hero-p strong { color: var(--ink); font-weight: 600; }
+  .hero-p em { color: var(--accent); font-style: normal; font-weight: 600; }
+  .hero-cta {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--bg);
+    font-weight: 700;
+    font-size: 17px;
+    padding: 16px 32px;
+    border-radius: 2px;
+    letter-spacing: -0.01em;
+    transition: background 0.15s;
+    border: none;
+    cursor: pointer;
+  }
+  .btn-primary:hover { background: var(--accent-dark); color: var(--bg); }
+  .hero-note {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-muted);
+  }
+
+  /* CHAT MOCK */
+  .chat-wrap {
+    animation: riseIn 0.7s 0.15s ease-out both;
+  }
+  .chat-card {
+    background: var(--chat-bg);
+    border: 1px solid var(--chat-border);
+    border-radius: 8px;
+    padding: 18px;
+    box-shadow: 0 24px 60px rgba(25,26,20,0.12);
+  }
+  .chat-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--chat-border);
+    margin-bottom: 14px;
+  }
+  .chat-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    color: var(--bg);
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .chat-name { font-weight: 600; font-size: 14px; }
+  .chat-verified {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+  }
+  .chat-messages { display: flex; flex-direction: column; gap: 10px; }
+  .bubble {
+    max-width: 85%;
+    border-radius: 2px 10px 10px 10px;
+    padding: 11px 14px;
+    font-size: 13.5px;
+    line-height: 1.45;
+    color: #3A3B32;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+    background: var(--white);
+    align-self: flex-start;
+  }
+  .bubble-btn {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 9px 14px;
+    font-size: 13px;
+    color: var(--accent);
+    border: 1px solid var(--accent-border);
+    text-align: center;
+    font-weight: 600;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+    max-width: 85%;
+    align-self: flex-start;
+  }
+  .bubble-out {
+    max-width: 60%;
+    background: var(--bubble-out);
+    border-radius: 10px 2px 10px 10px;
+    padding: 11px 14px;
+    font-size: 13.5px;
+    color: var(--bubble-out-ink);
+    align-self: flex-end;
+  }
+  .bubble:nth-child(1) { animation: bubbleIn 0.5s 0.5s ease-out both; }
+  .bubble-btn    { animation: bubbleIn 0.5s 0.8s ease-out both; }
+  .bubble-out    { animation: bubbleIn 0.5s 1.3s ease-out both; }
+  .bubble:nth-child(4) { animation: bubbleIn 0.5s 1.9s ease-out both; }
+  .chat-caption {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-muted);
+    text-align: center;
+    margin-top: 12px;
+    letter-spacing: 0.06em;
+  }
+
+  /* TICKER */
+  .ticker {
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+    padding: 14px 0;
+    background: var(--bg-alt);
+  }
+  .ticker-track {
+    display: flex;
+    gap: 48px;
+    white-space: nowrap;
+    animation: tickerMove 28s linear infinite;
+    width: max-content;
+  }
+  .ticker-item {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-muted);
+    letter-spacing: 0.1em;
+  }
+  .ticker-dot {
+    color: var(--accent);
+    margin-left: 40px;
+  }
+
+  /* SECTIONS SHARED */
+  section { border-bottom: 1px solid var(--border); }
+  .section-inner { max-width: 960px; margin: 0 auto; }
+  .section-inner-wide { max-width: 1100px; margin: 0 auto; }
+
+  .h2 {
+    font-size: clamp(30px, 3.4vw, 48px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.08;
+    margin-bottom: 24px;
+  }
+  .h2-center { text-align: center; }
+  .body-lg {
+    font-size: clamp(17px, 1.5vw, 21px);
+    line-height: 1.65;
+    color: var(--ink-mid);
+    font-weight: 300;
+    max-width: 68ch;
+    margin-bottom: 20px;
+  }
+  .body-lg strong { color: var(--ink); font-weight: 600; }
+
+  /* PAIN SECTION */
+  .pain { padding: var(--pad-y) var(--pad-x); }
+  .pain .h2 { max-width: 22ch; }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    gap: 20px;
+    margin-top: 48px;
+  }
+  .stat-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 28px;
+  }
+  .stat-highlight {
+    font-size: clamp(30px, 2.6vw, 40px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .stat-text {
+    color: var(--ink-mid);
+    font-size: 15px;
+    line-height: 1.55;
+    font-weight: 300;
+  }
+
+  /* MSG TYPES */
+  .msg-types {
+    padding: var(--pad-y) var(--pad-x);
+    background: var(--bg-alt);
+  }
+  .msg-types .h2 { margin-bottom: 16px; }
+  .msg-types .intro-p {
+    text-align: center;
+    color: var(--ink-mid);
+    font-size: 17px;
+    font-weight: 300;
+    margin: 0 auto 56px;
+    max-width: 64ch;
+    line-height: 1.6;
+  }
+  .msg-types .intro-p strong { color: var(--ink); font-weight: 600; }
+  .cards-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    gap: 20px;
+  }
+  .msg-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: clamp(28px, 3vw, 44px);
+  }
+  .msg-card-featured {
+    border-color: var(--accent);
+  }
+  .msg-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .msg-cat {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-muted);
+    letter-spacing: 0.12em;
+  }
+  .price-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 2px;
+  }
+  .price-tag-light { color: var(--accent); background: var(--accent-tint); }
+  .price-tag-dark  { color: var(--bg); background: var(--accent); }
+  .msg-card h3 {
+    font-size: 23px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 14px;
+  }
+  .msg-card p {
+    color: var(--ink-mid);
+    font-size: 15.5px;
+    line-height: 1.65;
+    font-weight: 300;
+  }
+  .msg-card p strong { color: var(--ink); font-weight: 600; }
+  .msg-bullets {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    color: var(--ink-muted);
+    line-height: 1.9;
+    margin-top: 18px;
+  }
+
+  /* HOW IT WORKS */
+  .how {
+    padding: var(--pad-y) var(--pad-x);
+  }
+  .how-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    gap: clamp(32px, 5vw, 80px);
+    align-items: start;
+  }
+  .how-sticky {
+    position: sticky;
+    top: 88px;
+    align-self: start;
+  }
+  .how-sticky .h2 { margin-bottom: 18px; }
+  .how-sub {
+    color: var(--ink-mid);
+    font-size: 16px;
+    line-height: 1.6;
+    font-weight: 300;
+  }
+  .steps { display: flex; flex-direction: column; }
+  .step {
+    display: grid;
+    grid-template-columns: clamp(48px, 7vw, 80px) minmax(0, 1fr);
+    gap: clamp(14px, 2vw, 24px);
+    padding: 28px 0;
+    border-top: 1px solid var(--border);
+    align-items: baseline;
+  }
+  .step-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .step-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .step-text {
+    color: var(--ink-mid);
+    font-size: 15.5px;
+    line-height: 1.6;
+    font-weight: 300;
+    max-width: 62ch;
+  }
+
+  /* PRICING */
+  .pricing {
+    padding: var(--pad-y) var(--pad-x);
+  }
+  .pricing .h2 { margin-bottom: 12px; }
+  .pricing-sub {
+    text-align: center;
+    color: var(--ink-mid);
+    font-size: 17px;
+    font-weight: 300;
+    margin-bottom: 56px;
+  }
+  .sim-card {
+    border: 1px solid var(--border);
+    background: var(--white);
+    border-radius: 6px;
+    padding: clamp(24px, 3vw, 40px);
+    box-shadow: 0 12px 40px rgba(25,26,20,0.06);
+  }
+  .sim-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(20px, 4vw, 56px);
+    align-items: center;
+  }
+  .sim-slider-wrap {
+    flex: 1 1 280px;
+    min-width: 0;
+  }
+  .sim-label-top {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    margin-bottom: 10px;
+  }
+  .sim-qty {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+  input[type="range"] {
+    width: 100%;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+  .sim-range-labels {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-muted);
+    margin-top: 6px;
+  }
+  .sim-total {
+    flex: 1 1 130px;
+    text-align: right;
+  }
+  .sim-total-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
+  }
+  .sim-total-val {
+    font-size: clamp(24px, 2.4vw, 34px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  .sim-total-val-accent { color: var(--accent); }
+  .sim-note {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-muted);
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* TESTIMONIALS */
+  .testimonials {
+    padding: var(--pad-y) var(--pad-x);
+    background: var(--bg-alt);
+  }
+  .testimonials .h2 { margin-bottom: 48px; max-width: 20ch; }
+  .dep-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 270px), 1fr));
+    gap: 20px;
+  }
+  .dep-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .dep-quote {
+    font-size: 17px;
+    line-height: 1.6;
+    font-weight: 400;
+    color: #3A3B32;
+  }
+  .dep-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: auto;
+  }
+  .dep-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+  .dep-name { font-weight: 700; font-size: 14.5px; }
+  .dep-biz {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-muted);
+  }
+
+  /* FAQ */
+  .faq { padding: var(--pad-y) var(--pad-x); }
+  .faq-inner { max-width: 820px; margin: 0 auto; }
+  .faq .h2 { margin-bottom: 40px; }
+  .faq-list { display: flex; flex-direction: column; }
+  .faq-item { border-top: 1px solid var(--border); }
+  .faq-item:last-child { border-bottom: 1px solid var(--border); }
+  .faq-btn {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    background: none;
+    border: none;
+    padding: 22px 0;
+    cursor: pointer;
+    text-align: left;
+    font-family: 'Bricolage Grotesque', sans-serif;
+  }
+  .faq-q {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .faq-icon {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 20px;
+    color: var(--accent);
+    flex-shrink: 0;
+    transition: transform 0.2s;
+  }
+  .faq-answer {
+    color: var(--ink-mid);
+    font-size: 15.5px;
+    line-height: 1.65;
+    font-weight: 300;
+    padding: 0 clamp(12px, 4vw, 40px) 24px 0;
+    max-width: 68ch;
+    display: none;
+  }
+  .faq-item.open .faq-answer { display: block; }
+  .faq-item.open .faq-icon { content: '−'; }
+
+  /* FORM */
+  .form-section {
+    padding: clamp(56px, 9vh, 120px) var(--pad-x);
+  }
+  .form-inner { max-width: 640px; margin: 0 auto; }
+  .form-header {
+    text-align: center;
+    margin-bottom: 44px;
+  }
+  .form-header .h2 { margin-bottom: 12px; }
+  .form-header p {
+    color: var(--ink-mid);
+    font-size: 16px;
+    font-weight: 300;
+  }
+  .form-fields { display: flex; flex-direction: column; gap: 16px; }
+  .form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 16px;
+  }
+  .field {
+    background: var(--white);
+    border: 1px solid #D8D5C6;
+    border-radius: 3px;
+    padding: 15px 16px;
+    font-size: 15px;
+    color: var(--ink);
+    width: 100%;
+    transition: border-color 0.15s;
+  }
+  .field::placeholder { color: var(--ink-muted); }
+  select.field { cursor: pointer; }
+  select.field:not(:valid),
+  select.field.placeholder { color: var(--ink-muted); }
+  .form-error {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--error);
+    display: none;
+  }
+  .form-error.visible { display: block; }
+  .btn-submit {
+    background: var(--accent);
+    color: var(--bg);
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    padding: 17px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    letter-spacing: -0.01em;
+    margin-top: 4px;
+    width: 100%;
+    transition: background 0.15s;
+  }
+  .btn-submit:hover { background: var(--accent-dark); }
+  .form-disclaimer {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-muted);
+    text-align: center;
+  }
+
+  /* SUCCESS STATE */
+  .form-success {
+    text-align: center;
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    padding: clamp(40px, 5vw, 64px);
+    background: var(--white);
+    display: none;
+  }
+  .form-success.visible { display: block; }
+  .form-fields-wrap.hidden { display: none; }
+  .success-icon {
+    font-size: 44px;
+    margin-bottom: 16px;
+    color: var(--accent);
+  }
+  .success-h2 {
+    font-size: clamp(26px, 2.6vw, 36px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+  .success-p {
+    color: var(--ink-mid);
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 28px var(--pad-x);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-brand {
+    font-weight: 800;
+    font-size: 16px;
+  }
+  .footer-copy {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-muted);
+    letter-spacing: 0.06em;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="nav">
+  <div class="nav-brand">
+    <span class="nav-wordmark">OLYMPIAN</span>
+    <span class="nav-sub">API OFICIAL · WHATSAPP</span>
+  </div>
+  <a href="#contato" class="btn-nav">FALAR COM A GENTE →</a>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <div class="label">PARA DONOS DE DELIVERY</div>
+    <h1 class="hero-h1">Seu cliente pediu uma vez e <em>nunca mais voltou</em>. A gente traz ele de volta.</h1>
+    <p class="hero-p">A Olympian coloca sua promoção <strong>direto no WhatsApp de quem já comprou de você</strong> — pela API Oficial da Meta, sem risco de bloqueio. A partir de <em>R$ 0,14</em> por mensagem, pré-pago.</p>
+    <div class="hero-cta">
+      <a href="#contato" class="btn-primary">Quero trazer meus clientes de volta</a>
+      <span class="hero-note">pré-pago · sem mensalidade</span>
+    </div>
+  </div>
+
+  <!-- Chat Mock -->
+  <div class="chat-wrap">
+    <div class="chat-card">
+      <div class="chat-header">
+        <div class="chat-avatar">B</div>
+        <div>
+          <div class="chat-name">Burguer do Zé</div>
+          <div class="chat-verified">✓ conta comercial verificada</div>
+        </div>
+      </div>
+      <div class="chat-messages">
+        <div class="bubble">Oi! 👋 Quer receber as promoções do Burguer do Zé em primeira mão? Toque no botão abaixo pra confirmar seu número.</div>
+        <div class="bubble-btn">✓ Quero receber</div>
+        <div class="bubble-out">Quero receber ✓</div>
+        <div class="bubble">🍔 <strong>SÓ HOJE:</strong> combo duplo + batata por R$ 29,90. Peça agora e receba em 40 min → <span style="color:#1A73C7">burguerdoze.com/pedir</span></div>
+      </div>
+    </div>
+    <div class="chat-caption">É ASSIM QUE SEU CLIENTE RECEBE</div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track" id="ticker-track"></div>
+</div>
+
+<!-- A DOR -->
+<section class="pain">
+  <div class="section-inner">
+    <div class="label">O PROBLEMA QUE NINGUÉM TE CONTOU</div>
+    <h2 class="h2">Você gasta pra atrair cliente novo. E esquece dos que já te conhecem.</h2>
+    <p class="body-lg">Pensa na sua base: centenas — talvez milhares — de pessoas que já pediram no seu delivery. Elas gostaram, comeram, e depois... sumiram. Não porque não gostaram. Porque <strong>esqueceram de você</strong>. No dia da fome, ganhou o concorrente que apareceu primeiro na tela.</p>
+    <p class="body-lg">Disparo em massa é simples: a gente pega essa lista de clientes e envia sua promoção <strong>direto no WhatsApp de cada um</strong>, no horário em que eles estão decidindo o que jantar. Não é anúncio que a pessoa rola e ignora. É uma mensagem no app que ela abre todo dia.</p>
+    <p class="body-lg" style="margin-bottom:0">Trazer de volta quem já comprou custa centavos. Conquistar um cliente do zero custa reais em tráfego pago — e ele ainda pode nunca voltar.</p>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-highlight">7 em 10</div>
+        <div class="stat-text">clientes de delivery não voltam depois do primeiro pedido — não por insatisfação, mas porque nenhuma oferta os lembrou de voltar.</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-highlight">98%</div>
+        <div class="stat-text">é a taxa de abertura de mensagens no WhatsApp. E-mail e post no Instagram não chegam nem perto de aparecer pra tanta gente.</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-highlight">R$ 0,14</div>
+        <div class="stat-text">é o que custa reativar um cliente que já te conhece. Compare com o custo de conquistar um cliente novo no tráfego pago.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIPOS DE MENSAGEM -->
+<section class="msg-types">
+  <div class="section-inner-wide">
+    <div class="label" style="text-align:center">ENTENDA ANTES DE CONTRATAR</div>
+    <h2 class="h2 h2-center">O WhatsApp cobra por tipo de mensagem.<br>É por isso que temos dois preços.</h2>
+    <p class="intro-p">Na API Oficial, a Meta classifica cada mensagem em categorias — e cada categoria tem um custo diferente. As duas que importam pro seu delivery são <strong>utilidade</strong> e <strong>marketing</strong>.</p>
+    <div class="cards-2">
+      <div class="msg-card">
+        <div class="msg-card-top">
+          <span class="msg-cat">CATEGORIA UTILIDADE</span>
+          <span class="price-tag price-tag-light">R$ 0,14</span>
+        </div>
+        <h3>Mensagem de confirmação</h3>
+        <p>É uma mensagem de serviço: pergunta ao cliente se ele quer <strong>confirmar o número para receber promoções</strong>. Por ser utilidade, custa menos. Quem toca em "quero receber" ganha sua promoção na sequência — e vira uma base que <em>pediu</em> pra receber suas ofertas.</p>
+        <div class="msg-bullets">→ Custo 3x menor por contato<br>→ Base engajada, que respondeu sim<br>→ Ideal pra listas grandes</div>
+      </div>
+      <div class="msg-card msg-card-featured">
+        <div class="msg-card-top">
+          <span class="msg-cat">CATEGORIA MARKETING</span>
+          <span class="price-tag price-tag-dark">R$ 0,44</span>
+        </div>
+        <h3>Promoção direta</h3>
+        <p>É a oferta chegando <strong>sem etapa de confirmação</strong>: combo do dia, cupom, lançamento de cardápio — direto na caixa de entrada de toda a lista, no mesmo instante. Por ser marketing, a Meta cobra mais. Impacto máximo, na hora.</p>
+        <div class="msg-bullets">→ 100% da lista recebe a oferta<br>→ Perfeito pra ação do dia (sexta, chuva, jogo)<br>→ Resultado imediato nos pedidos</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section class="how">
+  <div class="how-grid">
+    <div class="how-sticky">
+      <div class="label">COMO FUNCIONA</div>
+      <h2 class="h2">Você manda a lista. A gente cuida de todo o resto.</h2>
+      <p class="how-sub">A configuração inicial leva cerca de 3 dias. Depois disso, disparar vira rotina de 5 minutos.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div>
+          <div class="step-title">Configuração completa (≈ 3 dias)</div>
+          <div class="step-text">Cadastramos um número dedicado na API Oficial do WhatsApp, aprovamos os modelos de mensagem com a Meta e rodamos os testes. Você não toca em nada técnico.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div>
+          <div class="step-title">Você envia a lista do dia</div>
+          <div class="step-text">Mandou a lista de contatos, a gente conta quantas pessoas tem e te retorna o valor exato do disparo. Transparência total antes de qualquer cobrança.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div>
+          <div class="step-title">Pagou, agendou</div>
+          <div class="step-text">Confirmado o pagamento, agendamos o disparo para o dia e horário que você escolher — 11h de sexta antes do almoço, 18h antes do jantar, você decide.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div>
+          <div class="step-title">Disparo no volume que você precisar</div>
+          <div class="step-text">1.000 mensagens ou 50.000 no mesmo dia: a estrutura aguenta. Sem fila, sem limite artificial.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">05</div>
+        <div>
+          <div class="step-title">Repetiu? É só mandar a próxima lista</div>
+          <div class="step-text">Depois do setup, cada novo disparo é só enviar a lista. Nada de reconfiguração, nada de burocracia.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PREÇOS / SIMULADOR -->
+<section class="pricing">
+  <div class="section-inner-wide">
+    <div class="label" style="text-align:center">PREÇO POR MENSAGEM. PONTO.</div>
+    <h2 class="h2 h2-center">Sem mensalidade. Sem taxa de setup.<br>No dia que você não dispara, você não paga.</h2>
+    <p class="pricing-sub">Pré-pago: você vê e aprova o valor exato antes de cada disparo.</p>
+    <div class="sim-card">
+      <div class="sim-row">
+        <div class="sim-slider-wrap">
+          <div class="sim-label-top">SIMULE SEU DISPARO</div>
+          <div class="sim-qty" id="sim-qty">10.000 mensagens</div>
+          <input type="range" min="500" max="50000" step="500" value="10000" id="sim-range">
+          <div class="sim-range-labels"><span>500</span><span>50.000 / dia</span></div>
+        </div>
+        <div class="sim-total">
+          <div class="sim-total-label">COM CONFIRMAÇÃO</div>
+          <div class="sim-total-val" id="sim-confirmado">R$&nbsp;1.400,00</div>
+        </div>
+        <div class="sim-total">
+          <div class="sim-total-label">DIRETO</div>
+          <div class="sim-total-val sim-total-val-accent" id="sim-direto">R$&nbsp;4.400,00</div>
+        </div>
+      </div>
+      <div class="sim-note">Esse é o valor total. Não existe nenhuma outra cobrança — nem mensalidade, nem manutenção, nem taxa escondida.</div>
+    </div>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section class="testimonials">
+  <div class="section-inner-wide">
+    <div class="label">QUEM JÁ DISPARA COM A GENTE</div>
+    <h2 class="h2">O movimento de sexta-feira mudou de figura.</h2>
+    <div class="dep-grid">
+      <div class="dep-card">
+        <div class="dep-quote">"Eu tinha 4 mil contatos parados numa planilha. No primeiro disparo, sexta-feira bateu recorde de pedidos. O custo se pagou no primeiro dia."</div>
+        <div class="dep-author">
+          <div class="dep-avatar">R</div>
+          <div>
+            <div class="dep-name">Rafael M.</div>
+            <div class="dep-biz">Hamburgueria · Campinas/SP</div>
+          </div>
+        </div>
+      </div>
+      <div class="dep-card">
+        <div class="dep-quote">"O que me convenceu foi não ter mensalidade. Disparo quando quero, pago só aquilo. Em dia de chuva, mando oferta 17h e a cozinha lota."</div>
+        <div class="dep-author">
+          <div class="dep-avatar">C</div>
+          <div>
+            <div class="dep-name">Carla T.</div>
+            <div class="dep-biz">Pizzaria · Belo Horizonte/MG</div>
+          </div>
+        </div>
+      </div>
+      <div class="dep-card">
+        <div class="dep-quote">"Já tinha tomado bloqueio usando ferramenta paralela. Com a API Oficial durmo tranquilo — e a entrega das mensagens é outra coisa."</div>
+        <div class="dep-author">
+          <div class="dep-avatar">D</div>
+          <div>
+            <div class="dep-name">Diego F.</div>
+            <div class="dep-biz">Japonês delivery · Curitiba/PR</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="faq-inner">
+    <div class="label">PERGUNTAS FREQUENTES</div>
+    <h2 class="h2">O que todo dono de delivery pergunta</h2>
+    <div class="faq-list" id="faq-list"></div>
+  </div>
+</section>
+
+<!-- FORMULÁRIO -->
+<section class="form-section" id="contato">
+  <div class="form-inner">
+    <div class="form-fields-wrap" id="form-fields-wrap">
+      <div class="form-header">
+        <div class="label">COMECE HOJE</div>
+        <h2 class="h2">Quantos pedidos a mais você quer nesta semana?</h2>
+        <p>Preencha abaixo e nossa equipe te chama no WhatsApp em até 24h com sua simulação.</p>
+      </div>
+      <div class="form-fields">
+        <div class="form-row">
+          <input class="field" id="f-nome" placeholder="Seu nome" type="text">
+          <input class="field" id="f-tel" placeholder="WhatsApp com DDD" type="tel">
+        </div>
+        <input class="field" id="f-email" placeholder="Seu melhor e-mail" type="email">
+        <select class="field placeholder" id="f-nicho">
+          <option value="">Nicho de atuação</option>
+          <option value="hamburgueria">Hamburgueria</option>
+          <option value="pizzaria">Pizzaria</option>
+          <option value="japonesa">Comida japonesa</option>
+          <option value="acai">Açaí / sobremesas</option>
+          <option value="marmita">Marmitas / fit</option>
+          <option value="outro">Outro delivery</option>
+        </select>
+        <select class="field placeholder" id="f-qtd">
+          <option value="">Quantas mensagens quer disparar?</option>
+          <option value="ate-1000">Até 1.000 por disparo</option>
+          <option value="1000-5000">1.000 a 5.000</option>
+          <option value="5000-20000">5.000 a 20.000</option>
+          <option value="20000-50000">20.000 a 50.000</option>
+          <option value="50000+">Mais de 50.000</option>
+        </select>
+        <div class="form-error" id="form-error">→ Preencha todos os campos para receber sua simulação.</div>
+        <button class="btn-submit" id="btn-submit">Quero minha simulação gratuita →</button>
+        <div class="form-disclaimer">Sem compromisso. Você só paga quando decidir disparar.</div>
+      </div>
+    </div>
+    <div class="form-success" id="form-success">
+      <div class="success-icon">✓</div>
+      <h2 class="success-h2" id="success-h2">Recebido!</h2>
+      <p class="success-p">Nossa equipe vai te chamar no WhatsApp em até 24h com a simulação do seu disparo. Enquanto isso, já separe a sua lista. 😉</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-brand">OLYMPIAN</span>
+  <span class="footer-copy">DISPAROS VIA API OFICIAL DO WHATSAPP · PRÉ-PAGO · © 2026</span>
+</footer>
+
+<script>
+  // ── Ticker ─────────────────────────────────────────────────────────────────
+  const TICKER_ITEMS = [
+    'API OFICIAL META', 'SEM RISCO DE BLOQUEIO', 'DE 1.000 A 50.000 DISPAROS/DIA',
+    'PRÉ-PAGO', 'SEM MENSALIDADE', 'NÚMERO DEDICADO', 'AGENDAMENTO NO SEU HORÁRIO'
+  ];
+  const track = document.getElementById('ticker-track');
+  // Duplicate for seamless loop
+  [...TICKER_ITEMS, ...TICKER_ITEMS].forEach(t => {
+    const span = document.createElement('span');
+    span.className = 'ticker-item';
+    span.innerHTML = `${t} <span class="ticker-dot">✦</span>`;
+    track.appendChild(span);
+  });
+
+  // ── Pricing Simulator ──────────────────────────────────────────────────────
+  const PC = 0.14;
+  const PD = 0.44;
+  const rangeEl   = document.getElementById('sim-range');
+  const qtyEl     = document.getElementById('sim-qty');
+  const confEl    = document.getElementById('sim-confirmado');
+  const diretEl   = document.getElementById('sim-direto');
+
+  function fmtBRL(v) {
+    return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
+  function updateSim() {
+    const q = parseInt(rangeEl.value, 10);
+    qtyEl.textContent   = q.toLocaleString('pt-BR') + ' mensagens';
+    confEl.textContent  = fmtBRL(q * PC);
+    diretEl.textContent = fmtBRL(q * PD);
+  }
+  rangeEl.addEventListener('input', updateSim);
+  updateSim();
+
+  // ── FAQ Accordion ──────────────────────────────────────────────────────────
+  const FAQS = [
+    {
+      p: 'O que é disparo em massa, na prática?',
+      r: 'É enviar a mesma mensagem — sua promoção, seu cupom, seu combo do dia — para toda a sua lista de clientes de uma só vez, direto no WhatsApp de cada um. Em vez de mandar contato por contato na mão, você manda a lista pra gente e todo mundo recebe no horário que você escolher.'
+    },
+    {
+      p: 'Meu número pode ser bloqueado?',
+      r: 'Não. Esse é o problema dos disparos feitos por ferramentas não oficiais, que usam WhatsApp comum. A Olympian usa a API Oficial da Meta, com um número dedicado e mensagens aprovadas previamente. É o mesmo canal que grandes empresas usam — feito exatamente para envio em escala.'
+    },
+    {
+      p: 'Preciso usar o meu número do WhatsApp?',
+      r: 'Não — e nem pode. O número cadastrado na API Oficial não pode estar vinculado a uma conta comum de WhatsApp. Por isso usamos um número exclusivo para os seus disparos. Seu número do dia a dia continua funcionando normalmente, separado.'
+    },
+    {
+      p: 'De onde vem a lista de contatos?',
+      r: 'De você. São os clientes que já pediram no seu delivery: histórico do iFood próprio, cadastro do seu sistema de pedidos, comandas, planilhas. Você manda a lista do dia e a gente conta os contatos e te retorna o valor exato antes de qualquer cobrança.'
+    },
+    {
+      p: 'Quanto tempo leva pra começar?',
+      r: 'Cerca de 3 dias. Nesse período cadastramos o número na API Oficial, registramos e aprovamos os modelos de mensagem junto à Meta e rodamos os testes. Depois disso, cada disparo é só mandar a lista — leva minutos.'
+    },
+    {
+      p: 'Existe alguma mensalidade ou valor mínimo?',
+      r: 'Não. Você paga apenas o valor do disparo que fizer: R$ 0,14 ou R$ 0,44 por mensagem, dependendo do tipo. Na semana que você não disparar, não paga nada. Sem setup, sem manutenção, sem fidelidade.'
+    },
+    {
+      p: 'Quantas mensagens consigo enviar por dia?',
+      r: 'Quantas você precisar. 1.000, 10.000 ou 50.000 no mesmo dia — a estrutura da API Oficial suporta. O volume é você quem define, disparo a disparo.'
+    },
+    {
+      p: 'Como funciona o pagamento?',
+      r: 'Pré-pago e transparente: você manda a lista, a gente conta os contatos e gera o valor. Você aprova, paga, e o disparo é agendado para o dia e horário que quiser. Simples assim.'
+    }
+  ];
+
+  const faqList = document.getElementById('faq-list');
+  FAQS.forEach((f, i) => {
+    const item = document.createElement('div');
+    item.className = 'faq-item';
+    item.innerHTML = `
+      <button class="faq-btn" aria-expanded="false">
+        <span class="faq-q">${f.p}</span>
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">${f.r}</div>
+    `;
+    const btn = item.querySelector('.faq-btn');
+    const icon = item.querySelector('.faq-icon');
+    btn.addEventListener('click', () => {
+      const isOpen = item.classList.contains('open');
+      // Close all
+      document.querySelectorAll('.faq-item.open').forEach(el => {
+        el.classList.remove('open');
+        el.querySelector('.faq-icon').textContent = '+';
+        el.querySelector('.faq-btn').setAttribute('aria-expanded', 'false');
+      });
+      if (!isOpen) {
+        item.classList.add('open');
+        icon.textContent = '−';
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    });
+    faqList.appendChild(item);
+  });
+
+  // ── Contact Form ───────────────────────────────────────────────────────────
+  const selNicho = document.getElementById('f-nicho');
+  const selQtd   = document.getElementById('f-qtd');
+
+  [selNicho, selQtd].forEach(sel => {
+    sel.addEventListener('change', () => {
+      sel.classList.toggle('placeholder', !sel.value);
+    });
+  });
+
+  document.getElementById('btn-submit').addEventListener('click', () => {
+    const nome  = document.getElementById('f-nome').value.trim();
+    const tel   = document.getElementById('f-tel').value.trim();
+    const email = document.getElementById('f-email').value.trim();
+    const nicho = selNicho.value;
+    const qtd   = selQtd.value;
+    const errEl = document.getElementById('form-error');
+
+    if (!nome || !tel || !email || !nicho || !qtd) {
+      errEl.classList.add('visible');
+      return;
+    }
+    errEl.classList.remove('visible');
+
+    const firstName = nome.split(' ')[0] || 'obrigado';
+    document.getElementById('success-h2').textContent = `Recebido, ${firstName}!`;
+    document.getElementById('form-fields-wrap').classList.add('hidden');
+    document.getElementById('form-success').classList.add('visible');
+  });
+</script>
+</body>
+</html>
