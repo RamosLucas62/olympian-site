@@ -8,7 +8,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="icon" type="image/png" href="favicon.png">
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-N5XG543X');</script>
+<!-- End Google Tag Manager -->
+<link rel="icon" type="image/svg+xml" href="logo.svg">
 <style>
   :root {
     --accent: #128C45;
@@ -192,6 +199,13 @@
     padding: 18px;
     box-shadow: 0 24px 60px rgba(25,26,20,0.12);
   }
+  .chat-screenshot {
+    width: 100%;
+    max-width: 340px;
+    border-radius: 12px;
+    box-shadow: 0 24px 60px rgba(25,26,20,0.18);
+    display: block;
+  }
   .chat-header {
     display: flex;
     align-items: center;
@@ -212,6 +226,12 @@
     color: var(--bg);
     font-size: 14px;
     flex-shrink: 0;
+    overflow: hidden;
+  }
+  .chat-avatar img {
+    width: 70%;
+    height: 70%;
+    object-fit: contain;
   }
   .chat-name { font-weight: 600; font-size: 14px; }
   .chat-verified {
@@ -738,38 +758,265 @@
     line-height: 1.6;
   }
 
+  /* SMOOTH SCROLL */
+  html { scroll-behavior: smooth; }
+
+  /* SECTION CTA */
+  .section-cta {
+    text-align: center;
+    margin-top: 48px;
+  }
+
+  /* PRICING DARK BACKGROUND */
+  .pricing { background: #0F1C12; }
+  .pricing .label { color: #5FC87A; }
+  .pricing .h2 { color: #FAF9F3; }
+  .pricing-sub { color: rgba(250,249,243,0.6); }
+  .pricing .sim-card {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(255,255,255,0.1);
+  }
+  .pricing .sim-label-top { color: #5FC87A; }
+  .pricing .sim-qty { color: #FAF9F3; }
+  .pricing .sim-range-labels { color: rgba(250,249,243,0.4); }
+  .pricing .sim-total-label { color: rgba(250,249,243,0.5); }
+  .pricing .sim-total-val { color: #FAF9F3; }
+  .pricing .sim-total-val-accent { color: #5FC87A; }
+  .pricing .sim-note { color: rgba(250,249,243,0.45); border-color: rgba(255,255,255,0.1); }
+
   /* FOOTER */
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 28px var(--pad-x);
+  .footer-new {
+    background: #111C14;
+    color: #FAF9F3;
+    padding: clamp(48px, 7vh, 80px) var(--pad-x) 0;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+    gap: 48px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .footer-wordmark {
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #FAF9F3;
+    margin-bottom: 10px;
+  }
+  .footer-tagline {
+    font-size: 14px;
+    color: rgba(250,249,243,0.5);
+    font-weight: 300;
+    line-height: 1.5;
+  }
+  .footer-col-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: rgba(250,249,243,0.4);
+    margin-bottom: 18px;
+  }
+  .footer-nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .footer-nav-links a {
+    color: rgba(250,249,243,0.7);
+    font-size: 15px;
+    transition: color 0.15s;
+  }
+  .footer-nav-links a:hover { color: #5FC87A; }
+  .footer-contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 14px;
+    font-size: 14px;
+    color: rgba(250,249,243,0.7);
+  }
+  .footer-contact-item a { color: rgba(250,249,243,0.7); transition: color 0.15s; }
+  .footer-contact-item a:hover { color: #5FC87A; }
+  .footer-bottom {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
     gap: 12px;
-  }
-  .footer-brand {
-    font-weight: 800;
-    font-size: 16px;
-  }
-  .footer-copy {
+    padding: 20px 0;
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 11.5px;
+    font-size: 11px;
+    color: rgba(250,249,243,0.3);
+  }
+  .footer-bottom-links { display: flex; gap: 24px; }
+  .footer-bottom-links a { color: rgba(250,249,243,0.3); transition: color 0.15s; }
+  .footer-bottom-links a:hover { color: rgba(250,249,243,0.6); }
+
+  /* FLOAT WHATSAPP */
+  .float-wa {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #25D366;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.22);
+    z-index: 200;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .float-wa:hover { transform: scale(1.08); box-shadow: 0 6px 28px rgba(0,0,0,0.3); }
+  .float-wa svg { width: 28px; height: 28px; fill: #fff; }
+
+  /* TOASTS */
+  .toast-zone {
+    position: fixed;
+    bottom: 28px;
+    left: 28px;
+    z-index: 300;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+  }
+  .toast {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    box-shadow: 0 8px 32px rgba(25,26,20,0.14);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 240px;
+    max-width: 320px;
+    pointer-events: auto;
+    animation: toastIn 0.35s ease-out both;
+  }
+  .toast.out { animation: toastOut 0.35s ease-in both; }
+  .toast-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--bg);
+    font-weight: 800;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .toast-text { font-size: 13px; line-height: 1.45; color: var(--ink); }
+  .toast-text strong { font-weight: 700; }
+  .toast-time { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--ink-muted); margin-top: 2px; }
+  @keyframes toastIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes toastOut {
+    from { opacity: 1; transform: translateX(0); }
+    to   { opacity: 0; transform: translateX(-20px); }
+  }
+  @media (max-width: 480px) {
+    .toast-zone { bottom: 80px; left: 12px; right: 12px; }
+    .toast { max-width: 100%; }
+    .float-wa { bottom: 20px; right: 16px; }
+  }
+
+  /* MODAL OBRIGADO */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15,28,18,0.7);
+    backdrop-filter: blur(4px);
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+  }
+  .modal-overlay.visible { opacity: 1; pointer-events: auto; }
+  .modal-box {
+    background: var(--white);
+    border-radius: 12px;
+    padding: clamp(40px, 5vw, 64px);
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    transform: translateY(20px);
+    transition: transform 0.25s;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.2);
+  }
+  .modal-overlay.visible .modal-box { transform: translateY(0); }
+  .modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 20px;
     color: var(--ink-muted);
-    letter-spacing: 0.06em;
+    cursor: pointer;
+    padding: 4px 8px;
+    transition: color 0.15s;
+  }
+  .modal-close:hover { color: var(--ink); }
+  .modal-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--accent-tint);
+    color: var(--accent);
+    font-size: 26px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+  }
+  .modal-title {
+    font-size: clamp(26px, 2.6vw, 34px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+  }
+  .modal-text {
+    color: var(--ink-mid);
+    font-size: 17px;
+    line-height: 1.6;
+    font-weight: 300;
+    margin-bottom: 12px;
+  }
+  .modal-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--ink-muted);
   }
 </style>
 </head>
 <body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N5XG543X"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 
 <!-- NAV -->
 <header class="nav">
   <div class="nav-brand">
-    <img src="logo.png" alt="Olympian" class="nav-logo">
+    <img src="logo.svg" alt="Olympian" class="nav-logo">
     <span class="nav-wordmark">OLYMPIAN</span>
     <span class="nav-sub">API OFICIAL · WHATSAPP</span>
   </div>
-  <a href="#contato" class="btn-nav">FALAR COM A GENTE →</a>
+  <a href="#form-simulacao" class="btn-nav">FALAR COM A GENTE →</a>
 </header>
 
 <!-- HERO -->
@@ -779,7 +1026,7 @@
     <h1 class="hero-h1">Seu cliente pediu uma vez e <em>nunca mais voltou</em>. A gente traz ele de volta.</h1>
     <p class="hero-p">A Olympian coloca sua promoção <strong>direto no WhatsApp de quem já comprou de você</strong> — pela API Oficial da Meta, sem risco de bloqueio. A partir de <em>R$ 0,14</em> por mensagem, pré-pago.</p>
     <div class="hero-cta">
-      <a href="#contato" class="btn-primary">Quero trazer meus clientes de volta</a>
+      <a href="#form-simulacao" class="btn-primary">Quero trazer meus clientes de volta</a>
       <span class="hero-note">pré-pago · sem mensalidade</span>
     </div>
   </div>
@@ -836,7 +1083,7 @@
 </section>
 
 <!-- TIPOS DE MENSAGEM -->
-<section class="msg-types">
+<section class="msg-types" id="precos">
   <div class="section-inner-wide">
     <div class="label" style="text-align:center">ENTENDA ANTES DE CONTRATAR</div>
     <h2 class="h2 h2-center">O WhatsApp cobra por tipo de mensagem.<br>É por isso que temos dois preços.</h2>
@@ -861,11 +1108,14 @@
         <div class="msg-bullets">→ 100% da lista recebe a oferta<br>→ Perfeito pra ação do dia (sexta, chuva, jogo)<br>→ Resultado imediato nos pedidos</div>
       </div>
     </div>
+    <div class="section-cta">
+      <a href="#form-simulacao" class="btn-primary">Quero trazer meus clientes de volta →</a>
+    </div>
   </div>
 </section>
 
 <!-- COMO FUNCIONA -->
-<section class="how">
+<section class="how" id="como-funciona">
   <div class="how-grid">
     <div class="how-sticky">
       <div class="label">COMO FUNCIONA</div>
@@ -913,7 +1163,7 @@
 </section>
 
 <!-- PREÇOS / SIMULADOR -->
-<section class="pricing">
+<section class="pricing" id="simulador">
   <div class="section-inner-wide">
     <div class="label" style="text-align:center">PREÇO POR MENSAGEM. PONTO.</div>
     <h2 class="h2 h2-center">Sem mensalidade. Sem taxa de setup.<br>No dia que você não dispara, você não paga.</h2>
@@ -936,6 +1186,9 @@
         </div>
       </div>
       <div class="sim-note">Esse é o valor total. Não existe nenhuma outra cobrança — nem mensalidade, nem manutenção, nem taxa escondida.</div>
+    </div>
+    <div class="section-cta" style="margin-top:40px">
+      <a href="#form-simulacao" class="btn-primary">Quero trazer meus clientes de volta →</a>
     </div>
   </div>
 </section>
@@ -981,7 +1234,7 @@
 </section>
 
 <!-- FAQ -->
-<section class="faq">
+<section class="faq" id="faq">
   <div class="faq-inner">
     <div class="label">PERGUNTAS FREQUENTES</div>
     <h2 class="h2">O que todo dono de delivery pergunta</h2>
@@ -990,7 +1243,7 @@
 </section>
 
 <!-- FORMULÁRIO -->
-<section class="form-section" id="contato">
+<section class="form-section" id="form-simulacao">
   <div class="form-inner">
     <div class="form-fields-wrap" id="form-fields-wrap">
       <div class="form-header">
@@ -1003,24 +1256,7 @@
           <input class="field" id="f-nome" placeholder="Seu nome" type="text">
           <input class="field" id="f-tel" placeholder="WhatsApp com DDD" type="tel">
         </div>
-        <input class="field" id="f-email" placeholder="Seu melhor e-mail" type="email">
-        <select class="field placeholder" id="f-nicho">
-          <option value="">Nicho de atuação</option>
-          <option value="hamburgueria">Hamburgueria</option>
-          <option value="pizzaria">Pizzaria</option>
-          <option value="japonesa">Comida japonesa</option>
-          <option value="acai">Açaí / sobremesas</option>
-          <option value="marmita">Marmitas / fit</option>
-          <option value="outro">Outro delivery</option>
-        </select>
-        <select class="field placeholder" id="f-qtd">
-          <option value="">Quantas mensagens quer disparar?</option>
-          <option value="ate-1000">Até 1.000 por disparo</option>
-          <option value="1000-5000">1.000 a 5.000</option>
-          <option value="5000-20000">5.000 a 20.000</option>
-          <option value="20000-50000">20.000 a 50.000</option>
-          <option value="50000+">Mais de 50.000</option>
-        </select>
+        <input class="field" id="f-empresa" placeholder="Nome da empresa" type="text">
         <div class="form-error" id="form-error">→ Preencha todos os campos para receber sua simulação.</div>
         <button class="btn-submit" id="btn-submit">Quero minha simulação gratuita →</button>
         <div class="form-disclaimer">Sem compromisso. Você só paga quando decidir disparar.</div>
@@ -1035,10 +1271,55 @@
 </section>
 
 <!-- FOOTER -->
-<footer>
-  <span class="footer-brand">OLYMPIAN</span>
-  <span class="footer-copy">DISPAROS VIA API OFICIAL DO WHATSAPP · PRÉ-PAGO · © 2026</span>
+<footer class="footer-new">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-wordmark">OLYMPIAN</div>
+      <div class="footer-tagline">Disparos via API Oficial do WhatsApp</div>
+    </div>
+    <div>
+      <div class="footer-col-title">NAVEGAÇÃO</div>
+      <div class="footer-nav-links">
+        <a href="#como-funciona">Como funciona</a>
+        <a href="#simulador">Simulador</a>
+        <a href="#precos">Preços</a>
+        <a href="#faq">FAQ</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">CONTATO</div>
+      <div class="footer-contact-item">📱 <a href="https://wa.me/5562994992701">(62) 99499-2701</a></div>
+      <div class="footer-contact-item">📸 <a href="https://instagram.com/olympian.api" target="_blank" rel="noopener">@olympian.api</a></div>
+      <div class="footer-contact-item">✉️ <a href="mailto:ramos.lucas@aiolympian.com">ramos.lucas@aiolympian.com</a></div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Olympian · Todos os direitos reservados</span>
+    <div class="footer-bottom-links">
+      <a href="privacidade.html">Política de Privacidade</a>
+      <a href="termos.html">Termos de Uso</a>
+    </div>
+  </div>
 </footer>
+
+<!-- MODAL OBRIGADO -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal-box">
+    <button class="modal-close" id="modal-close" aria-label="Fechar">✕</button>
+    <div class="modal-icon">✓</div>
+    <h2 class="modal-title" id="modal-title">Recebido!</h2>
+    <p class="modal-text">Em breve entraremos em contato com você pelo WhatsApp com a simulação personalizada do seu disparo.</p>
+    <p class="modal-sub">Enquanto isso, já separe sua lista de clientes. 😉</p>
+  </div>
+</div>
+
+<!-- FLOAT WA -->
+<a href="https://wa.me/5562994992701?text=Ol%C3%A1%2C%20vim%20pelo%20site%20e%20quero%20entender%20como%20funciona%20o%20servi%C3%A7o%20de%20disparo%20no%20WhatsApp%20para%20meu%20delivery." class="float-wa" aria-label="WhatsApp" target="_blank" rel="noopener">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<!-- TOAST ZONE -->
+<div class="toast-zone" id="toast-zone"></div>
 
 <script>
   // ── Ticker ─────────────────────────────────────────────────────────────────
@@ -1142,34 +1423,91 @@
   });
 
   // ── Contact Form ───────────────────────────────────────────────────────────
-  const selNicho = document.getElementById('f-nicho');
-  const selQtd   = document.getElementById('f-qtd');
+  const WEBHOOK_URL = 'https://olympian-n8n.qtfovg.easypanel.host/webhook/ca5cc8d2-c2ac-4943-abec-c423a011fd70';
 
-  [selNicho, selQtd].forEach(sel => {
-    sel.addEventListener('change', () => {
-      sel.classList.toggle('placeholder', !sel.value);
-    });
+  const modalOverlay = document.getElementById('modal-overlay');
+  const modalTitle   = document.getElementById('modal-title');
+
+  document.getElementById('modal-close').addEventListener('click', () => {
+    modalOverlay.classList.remove('visible');
+  });
+  modalOverlay.addEventListener('click', (e) => {
+    if (e.target === modalOverlay) modalOverlay.classList.remove('visible');
   });
 
-  document.getElementById('btn-submit').addEventListener('click', () => {
-    const nome  = document.getElementById('f-nome').value.trim();
-    const tel   = document.getElementById('f-tel').value.trim();
-    const email = document.getElementById('f-email').value.trim();
-    const nicho = selNicho.value;
-    const qtd   = selQtd.value;
-    const errEl = document.getElementById('form-error');
+  document.getElementById('btn-submit').addEventListener('click', async () => {
+    const nome    = document.getElementById('f-nome').value.trim();
+    const tel     = document.getElementById('f-tel').value.trim();
+    const empresa = document.getElementById('f-empresa').value.trim();
+    const errEl   = document.getElementById('form-error');
+    const btn     = document.getElementById('btn-submit');
 
-    if (!nome || !tel || !email || !nicho || !qtd) {
+    if (!nome || !tel || !empresa) {
       errEl.classList.add('visible');
       return;
     }
     errEl.classList.remove('visible');
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+
+    try {
+      await fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nome, tel, empresa, origem: 'landing-page' })
+      });
+    } catch (_) { /* falha silenciosa — mostra popup de qualquer forma */ }
 
     const firstName = nome.split(' ')[0] || 'obrigado';
-    document.getElementById('success-h2').textContent = `Recebido, ${firstName}!`;
-    document.getElementById('form-fields-wrap').classList.add('hidden');
-    document.getElementById('form-success').classList.add('visible');
+    modalTitle.textContent = `Recebido, ${firstName}!`;
+    modalOverlay.classList.add('visible');
+    btn.disabled = false;
+    btn.textContent = 'Quero minha simulação gratuita →';
+    document.getElementById('f-nome').value = '';
+    document.getElementById('f-tel').value = '';
+    document.getElementById('f-empresa').value = '';
   });
+
+  // ── Social Proof Toasts ────────────────────────────────────────────────────
+  const TOAST_BIZ   = ["Burguer do Zé","Pizzaria Bella","Sushi Haru","Açaí do Ponto","Marmita da Vó","Hamburgueria 013","Padaria Central","Espetinho do João","Cantina Italiana","Poke House"];
+  const TOAST_TIMES = ["agora há pouco","há 2 minutos","há 5 minutos","há 8 minutos"];
+
+  function tRandInt(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+  function tShuffle(arr){ return arr.slice().sort(()=>Math.random()-.5); }
+
+  let tQueue = tShuffle(TOAST_BIZ);
+  let tLast  = '';
+
+  function nextToast() {
+    if (!tQueue.length) tQueue = tShuffle(TOAST_BIZ);
+    let biz = tQueue.shift();
+    if (biz === tLast && tQueue.length) { tQueue.push(biz); biz = tQueue.shift(); }
+    tLast = biz;
+    const vol    = tRandInt(8, 120) * 100;
+    const volFmt = vol.toLocaleString('pt-BR');
+    const time   = TOAST_TIMES[tRandInt(0, TOAST_TIMES.length-1)];
+    showToast(biz, volFmt, time);
+    setTimeout(nextToast, tRandInt(16000, 22000));
+  }
+
+  function showToast(biz, vol, time) {
+    const zone = document.getElementById('toast-zone');
+    const el   = document.createElement('div');
+    el.className = 'toast';
+    el.innerHTML = `
+      <div class="toast-avatar">${biz[0]}</div>
+      <div>
+        <div class="toast-text">🔥 <strong>${biz}</strong> disparou ${vol} mensagens</div>
+        <div class="toast-time">${time}</div>
+      </div>`;
+    zone.appendChild(el);
+    setTimeout(() => {
+      el.classList.add('out');
+      el.addEventListener('animationend', () => el.remove(), { once: true });
+    }, 8000);
+  }
+
+  setTimeout(nextToast, 5000);
 </script>
 </body>
 </html>
