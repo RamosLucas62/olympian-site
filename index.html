@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="favicon.png">
 <style>
   :root {
     --accent: #128C45;
@@ -80,8 +81,13 @@
   }
   .nav-brand {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     gap: 10px;
+  }
+  .nav-logo {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
   }
   .nav-wordmark {
     font-weight: 800;
@@ -759,6 +765,7 @@
 <!-- NAV -->
 <header class="nav">
   <div class="nav-brand">
+    <img src="logo.png" alt="Olympian" class="nav-logo">
     <span class="nav-wordmark">OLYMPIAN</span>
     <span class="nav-sub">API OFICIAL · WHATSAPP</span>
   </div>
