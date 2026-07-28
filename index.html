@@ -1477,6 +1477,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   let tQueue = tShuffle(TOAST_BIZ);
   let tLast  = '';
+  let toastTimer = null;
 
   function nextToast() {
     if (!tQueue.length) tQueue = tShuffle(TOAST_BIZ);
@@ -1487,7 +1488,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     const volFmt = vol.toLocaleString('pt-BR');
     const time   = TOAST_TIMES[tRandInt(0, TOAST_TIMES.length-1)];
     showToast(biz, volFmt, time);
-    setTimeout(nextToast, tRandInt(16000, 22000));
+    toastTimer = setTimeout(nextToast, tRandInt(16000, 22000));
   }
 
   function showToast(biz, vol, time) {
@@ -1507,7 +1508,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }, 8000);
   }
 
-  setTimeout(nextToast, 5000);
+  // Evita acúmulo de timers ao voltar via bfcache
+  window.addEventListener('pageshow', (e) => {
+    if (e.persisted) {
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(nextToast, 5000);
+    }
+  });
+
+  toastTimer = setTimeout(nextToast, 5000);
 </script>
 </body>
 </html>
