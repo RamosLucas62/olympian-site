@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Olympian · Disparo em Massa via WhatsApp API Oficial</title>
-<meta name="description" content="A Olympian coloca sua promoção direto no WhatsApp de quem já comprou de você — pela API Oficial da Meta, sem risco de bloqueio. A partir de R$ 0,14 por mensagem.">
+<meta name="description" content="A Olympian coloca sua promoção direto no WhatsApp de quem já comprou de você pela API Oficial da Meta, sem risco de bloqueio. A partir de R$ 0,18 por mensagem.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -34,7 +34,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     --accent-tint: #E8F5EC;
     --accent-border: #D5EDDF;
     --error: #B4540A;
-    --pad-x: clamp(20px, 5vw, 72px);
+    --pad-x: clamp(24px, 6vw, 96px);
     --pad-y: clamp(56px, 9vh, 110px);
   }
 
@@ -124,12 +124,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   /* HERO */
   .hero {
+    padding: clamp(48px, 8vh, 96px) var(--pad-x) clamp(48px, 8vh, 88px);
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-inner {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
     gap: clamp(32px, 5vw, 80px);
-    padding: clamp(48px, 8vh, 96px) var(--pad-x) clamp(48px, 8vh, 88px);
     align-items: center;
-    border-bottom: 1px solid var(--border);
+    max-width: 1280px;
+    margin: 0 auto;
   }
   .hero-text {
     animation: riseIn 0.7s ease-out both;
@@ -311,6 +315,119 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     margin-left: 40px;
   }
 
+  /* CLIENTS CAROUSEL */
+  .clients {
+    padding: 52px var(--pad-x);
+    background: var(--bg-alt);
+    overflow: hidden;
+  }
+  .clients-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  .clients-header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+  .clients-scroll-wrap {
+    position: relative;
+  }
+  .clients-scroll-wrap::before,
+  .clients-scroll-wrap::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 100px;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .clients-scroll-wrap::before {
+    left: 0;
+    background: linear-gradient(to right, var(--bg-alt), transparent);
+  }
+  .clients-scroll-wrap::after {
+    right: 0;
+    background: linear-gradient(to left, var(--bg-alt), transparent);
+  }
+  .clients-viewport {
+    overflow: hidden;
+  }
+  .clients-track {
+    display: flex;
+    align-items: center;
+    gap: 56px;
+    transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+    will-change: transform;
+  }
+  .client-logo-wrap {
+    flex: 0 0 auto;
+    width: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .client-logo {
+    max-width: 140px;
+    max-height: 52px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    transition: opacity 0.3s;
+    display: block;
+  }
+  .client-logo:hover {
+    opacity: 0.8;
+  }
+  .clients-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-top: 32px;
+  }
+  .clients-btn {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: var(--ink-mid);
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+    flex-shrink: 0;
+  }
+  .clients-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-tint);
+  }
+  .clients-dots {
+    display: flex;
+    gap: 8px;
+  }
+  .clients-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: background 0.2s, transform 0.2s;
+    cursor: pointer;
+  }
+  .clients-dot.active {
+    background: var(--accent);
+    transform: scale(1.35);
+  }
+  @media (max-width: 640px) {
+    .client-logo-wrap { width: 110px; }
+    .client-logo { max-width: 110px; max-height: 44px; }
+    .clients-scroll-wrap::before,
+    .clients-scroll-wrap::after { width: 60px; }
+  }
+
   /* SECTIONS SHARED */
   section { border-bottom: 1px solid var(--border); }
   .section-inner { max-width: 960px; margin: 0 auto; }
@@ -445,6 +562,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
     gap: clamp(32px, 5vw, 80px);
     align-items: start;
+    max-width: 1280px;
+    margin: 0 auto;
   }
   .how-sticky {
     position: sticky;
@@ -1021,10 +1140,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <!-- HERO -->
 <section class="hero">
+  <div class="hero-inner">
   <div class="hero-text">
     <div class="label">PARA DONOS DE DELIVERY</div>
     <h1 class="hero-h1">Seu cliente pediu uma vez e <em>nunca mais voltou</em>. A gente traz ele de volta.</h1>
-    <p class="hero-p">A Olympian coloca sua promoção <strong>direto no WhatsApp de quem já comprou de você</strong> — pela API Oficial da Meta, sem risco de bloqueio. A partir de <em>R$ 0,14</em> por mensagem, pré-pago.</p>
+    <p class="hero-p">A Olympian coloca sua promoção <strong>direto no WhatsApp de quem já comprou de você</strong> pela API Oficial da Meta, sem risco de bloqueio. A partir de <em>R$ 0,18</em> por mensagem, pré-pago.</p>
     <div class="hero-cta">
       <a href="#form-simulacao" class="btn-primary">Quero trazer meus clientes de volta</a>
       <span class="hero-note">pré-pago · sem mensalidade</span>
@@ -1050,6 +1170,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
     <div class="chat-caption">É ASSIM QUE SEU CLIENTE RECEBE</div>
   </div>
+  </div>
 </section>
 
 <!-- TICKER -->
@@ -1062,20 +1183,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="section-inner">
     <div class="label">O PROBLEMA QUE NINGUÉM TE CONTOU</div>
     <h2 class="h2">Você gasta pra atrair cliente novo. E esquece dos que já te conhecem.</h2>
-    <p class="body-lg">Pensa na sua base: centenas — talvez milhares — de pessoas que já pediram no seu delivery. Elas gostaram, comeram, e depois... sumiram. Não porque não gostaram. Porque <strong>esqueceram de você</strong>. No dia da fome, ganhou o concorrente que apareceu primeiro na tela.</p>
+    <p class="body-lg">Pensa na sua base: centenas talvez milhares de pessoas que já pediram no seu delivery. Elas gostaram, comeram, e depois... sumiram. Não porque não gostaram. Porque <strong>esqueceram de você</strong>. No dia da fome, ganhou o concorrente que apareceu primeiro na tela.</p>
     <p class="body-lg">Disparo em massa é simples: a gente pega essa lista de clientes e envia sua promoção <strong>direto no WhatsApp de cada um</strong>, no horário em que eles estão decidindo o que jantar. Não é anúncio que a pessoa rola e ignora. É uma mensagem no app que ela abre todo dia.</p>
-    <p class="body-lg" style="margin-bottom:0">Trazer de volta quem já comprou custa centavos. Conquistar um cliente do zero custa reais em tráfego pago — e ele ainda pode nunca voltar.</p>
+    <p class="body-lg" style="margin-bottom:0">Trazer de volta quem já comprou custa centavos. Conquistar um cliente do zero custa reais em tráfego pago e ele ainda pode nunca voltar.</p>
     <div class="stats-grid">
       <div class="stat-card">
         <div class="stat-highlight">7 em 10</div>
-        <div class="stat-text">clientes de delivery não voltam depois do primeiro pedido — não por insatisfação, mas porque nenhuma oferta os lembrou de voltar.</div>
+        <div class="stat-text">clientes de delivery não voltam depois do primeiro pedido não por insatisfação, mas porque nenhuma oferta os lembrou de voltar.</div>
       </div>
       <div class="stat-card">
         <div class="stat-highlight">98%</div>
         <div class="stat-text">é a taxa de abertura de mensagens no WhatsApp. E-mail e post no Instagram não chegam nem perto de aparecer pra tanta gente.</div>
       </div>
       <div class="stat-card">
-        <div class="stat-highlight">R$ 0,14</div>
+        <div class="stat-highlight">R$ 0,18</div>
         <div class="stat-text">é o que custa reativar um cliente que já te conhece. Compare com o custo de conquistar um cliente novo no tráfego pago.</div>
       </div>
     </div>
@@ -1087,30 +1208,57 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="section-inner-wide">
     <div class="label" style="text-align:center">ENTENDA ANTES DE CONTRATAR</div>
     <h2 class="h2 h2-center">O WhatsApp cobra por tipo de mensagem.<br>É por isso que temos dois preços.</h2>
-    <p class="intro-p">Na API Oficial, a Meta classifica cada mensagem em categorias — e cada categoria tem um custo diferente. As duas que importam pro seu delivery são <strong>utilidade</strong> e <strong>marketing</strong>.</p>
+    <p class="intro-p">Na API Oficial, a Meta classifica cada mensagem em categorias e cada categoria tem um custo diferente. As duas que importam pro seu delivery são <strong>utilidade</strong> e <strong>marketing</strong>.</p>
     <div class="cards-2">
       <div class="msg-card">
         <div class="msg-card-top">
           <span class="msg-cat">CATEGORIA UTILIDADE</span>
-          <span class="price-tag price-tag-light">R$ 0,14</span>
+          <span class="price-tag price-tag-light">R$ 0,18</span>
         </div>
         <h3>Mensagem de confirmação</h3>
-        <p>É uma mensagem de serviço: pergunta ao cliente se ele quer <strong>confirmar o número para receber promoções</strong>. Por ser utilidade, custa menos. Quem toca em "quero receber" ganha sua promoção na sequência — e vira uma base que <em>pediu</em> pra receber suas ofertas.</p>
+        <p>É uma mensagem de serviço: pergunta ao cliente se ele quer <strong>confirmar o número para receber promoções</strong>. Por ser utilidade, custa menos. Quem toca em "quero receber" ganha sua promoção na sequência e vira uma base que <em>pediu</em> pra receber suas ofertas.</p>
         <div class="msg-bullets">→ Custo 3x menor por contato<br>→ Base engajada, que respondeu sim<br>→ Ideal pra listas grandes</div>
       </div>
       <div class="msg-card msg-card-featured">
         <div class="msg-card-top">
           <span class="msg-cat">CATEGORIA MARKETING</span>
-          <span class="price-tag price-tag-dark">R$ 0,44</span>
+          <span class="price-tag price-tag-dark">R$ 0,48</span>
         </div>
         <h3>Promoção direta</h3>
-        <p>É a oferta chegando <strong>sem etapa de confirmação</strong>: combo do dia, cupom, lançamento de cardápio — direto na caixa de entrada de toda a lista, no mesmo instante. Por ser marketing, a Meta cobra mais. Impacto máximo, na hora.</p>
+        <p>É a oferta chegando <strong>sem etapa de confirmação</strong>: combo do dia, cupom, lançamento de cardápio direto na caixa de entrada de toda a lista, no mesmo instante. Por ser marketing, a Meta cobra mais. Impacto máximo, na hora.</p>
         <div class="msg-bullets">→ 100% da lista recebe a oferta<br>→ Perfeito pra ação do dia (sexta, chuva, jogo)<br>→ Resultado imediato nos pedidos</div>
       </div>
     </div>
     <div class="section-cta">
       <a href="#form-simulacao" class="btn-primary">Quero trazer meus clientes de volta →</a>
     </div>
+  </div>
+</section>
+
+<!-- EMPRESAS QUE CONFIAM -->
+<section class="clients">
+  <div class="clients-inner">
+  <div class="clients-header">
+    <div class="label">EMPRESAS QUE CONFIAM NA OLYMPIAN</div>
+  </div>
+  <div class="clients-scroll-wrap">
+    <div class="clients-viewport">
+      <div class="clients-track" id="clients-track">
+        <div class="client-logo-wrap"><img class="client-logo" src="https://midia.aiolympian.com/clients/319f5260-3904-4467-9771-89fb1297e332/logo-22a97672-0148-48a8-b76f-71a33b0edc33.png" alt="Cliente Olympian" loading="lazy"></div>
+        <div class="client-logo-wrap"><img class="client-logo" src="https://midia.aiolympian.com/clients/8516abe2-96b4-4997-a683-46af722e7f31/logo-3185640d-36a2-4071-a768-386e33aa1f57.jpeg" alt="Cliente Olympian" loading="lazy"></div>
+        <div class="client-logo-wrap"><img class="client-logo" src="https://midia.aiolympian.com/clients/85638680-1e5d-404a-a35e-7c3d405afa54/logo-6980ea28-6aa2-4138-a4fe-1fe2fa2c4ad1.jpg" alt="Cliente Olympian" loading="lazy"></div>
+        <div class="client-logo-wrap"><img class="client-logo" src="https://midia.aiolympian.com/clients/a6707e27-4248-46f7-83d2-4d47a5bc1573/logo-7a700889-c564-432b-90ef-ba8df223dea1.jpg" alt="Cliente Olympian" loading="lazy"></div>
+        <div class="client-logo-wrap"><img class="client-logo" src="https://midia.aiolympian.com/clients/b2254819-3d35-4641-a738-c88494c5ea59/logo-5f31b798-80fd-4f34-8de7-1882ac74d4be.PNG" alt="Cliente Olympian" loading="lazy"></div>
+        <div class="client-logo-wrap"><img class="client-logo" src="https://midia.aiolympian.com/clients/b8f88f43-a4f5-4f12-995e-f14f1a44b80f/logo-c54a7780-ca54-4988-9d6e-1ecb411bcaba.jpeg" alt="Cliente Olympian" loading="lazy"></div>
+        <div class="client-logo-wrap"><img class="client-logo" src="https://midia.aiolympian.com/clients/f4c472f6-a375-475b-85bf-edc841bed160/logo-73272f01-f3b3-4905-be02-b475ff2a04e3.jpeg" alt="Cliente Olympian" loading="lazy"></div>
+      </div>
+    </div>
+  </div>
+  <div class="clients-nav">
+    <button class="clients-btn" id="clients-prev" aria-label="Anterior">&#8592;</button>
+    <div class="clients-dots" id="clients-dots"></div>
+    <button class="clients-btn" id="clients-next" aria-label="Próximo">&#8594;</button>
+  </div>
   </div>
 </section>
 
@@ -1141,7 +1289,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="step-num">03</div>
         <div>
           <div class="step-title">Pagou, agendou</div>
-          <div class="step-text">Confirmado o pagamento, agendamos o disparo para o dia e horário que você escolher — 11h de sexta antes do almoço, 18h antes do jantar, você decide.</div>
+          <div class="step-text">Confirmado o pagamento, agendamos o disparo para o dia e horário que você escolher 11h de sexta antes do almoço, 18h antes do jantar, você decide.</div>
         </div>
       </div>
       <div class="step">
@@ -1185,7 +1333,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <div class="sim-total-val sim-total-val-accent" id="sim-direto">R$&nbsp;4.400,00</div>
         </div>
       </div>
-      <div class="sim-note">Esse é o valor total. Não existe nenhuma outra cobrança — nem mensalidade, nem manutenção, nem taxa escondida.</div>
+      <div class="sim-note">Esse é o valor total. Não existe nenhuma outra cobrança nem mensalidade, nem manutenção, nem taxa escondida.</div>
     </div>
     <div class="section-cta" style="margin-top:40px">
       <a href="#form-simulacao" class="btn-primary">Quero trazer meus clientes de volta →</a>
@@ -1220,7 +1368,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
       </div>
       <div class="dep-card">
-        <div class="dep-quote">"Já tinha tomado bloqueio usando ferramenta paralela. Com a API Oficial durmo tranquilo — e a entrega das mensagens é outra coisa."</div>
+        <div class="dep-quote">"Já tinha tomado bloqueio usando ferramenta paralela. Com a API Oficial durmo tranquilo e a entrega das mensagens é outra coisa."</div>
         <div class="dep-author">
           <div class="dep-avatar">D</div>
           <div>
@@ -1337,8 +1485,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   });
 
   // ── Pricing Simulator ──────────────────────────────────────────────────────
-  const PC = 0.14;
-  const PD = 0.44;
+  const PC = 0.18;
+  const PD = 0.48;
   const rangeEl   = document.getElementById('sim-range');
   const qtyEl     = document.getElementById('sim-qty');
   const confEl    = document.getElementById('sim-confirmado');
@@ -1360,15 +1508,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   const FAQS = [
     {
       p: 'O que é disparo em massa, na prática?',
-      r: 'É enviar a mesma mensagem — sua promoção, seu cupom, seu combo do dia — para toda a sua lista de clientes de uma só vez, direto no WhatsApp de cada um. Em vez de mandar contato por contato na mão, você manda a lista pra gente e todo mundo recebe no horário que você escolher.'
+      r: 'É enviar a mesma mensagem sua promoção, seu cupom, seu combo do dia para toda a sua lista de clientes de uma só vez, direto no WhatsApp de cada um. Em vez de mandar contato por contato na mão, você manda a lista pra gente e todo mundo recebe no horário que você escolher.'
     },
     {
       p: 'Meu número pode ser bloqueado?',
-      r: 'Não. Esse é o problema dos disparos feitos por ferramentas não oficiais, que usam WhatsApp comum. A Olympian usa a API Oficial da Meta, com um número dedicado e mensagens aprovadas previamente. É o mesmo canal que grandes empresas usam — feito exatamente para envio em escala.'
+      r: 'Não. Esse é o problema dos disparos feitos por ferramentas não oficiais, que usam WhatsApp comum. A Olympian usa a API Oficial da Meta, com um número dedicado e mensagens aprovadas previamente. É o mesmo canal que grandes empresas usam feito exatamente para envio em escala.'
     },
     {
       p: 'Preciso usar o meu número do WhatsApp?',
-      r: 'Não — e nem pode. O número cadastrado na API Oficial não pode estar vinculado a uma conta comum de WhatsApp. Por isso usamos um número exclusivo para os seus disparos. Seu número do dia a dia continua funcionando normalmente, separado.'
+      r: 'Não e nem pode. O número cadastrado na API Oficial não pode estar vinculado a uma conta comum de WhatsApp. Por isso usamos um número exclusivo para os seus disparos. Seu número do dia a dia continua funcionando normalmente, separado.'
     },
     {
       p: 'De onde vem a lista de contatos?',
@@ -1376,15 +1524,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     },
     {
       p: 'Quanto tempo leva pra começar?',
-      r: 'Cerca de 3 dias. Nesse período cadastramos o número na API Oficial, registramos e aprovamos os modelos de mensagem junto à Meta e rodamos os testes. Depois disso, cada disparo é só mandar a lista — leva minutos.'
+      r: 'Cerca de 3 dias. Nesse período cadastramos o número na API Oficial, registramos e aprovamos os modelos de mensagem junto à Meta e rodamos os testes. Depois disso, cada disparo é só mandar a lista leva minutos.'
     },
     {
       p: 'Existe alguma mensalidade ou valor mínimo?',
-      r: 'Não. Você paga apenas o valor do disparo que fizer: R$ 0,14 ou R$ 0,44 por mensagem, dependendo do tipo. Na semana que você não disparar, não paga nada. Sem setup, sem manutenção, sem fidelidade.'
+      r: 'Não. Você paga apenas o valor do disparo que fizer: R$ 0,18 ou R$ 0,48 por mensagem, dependendo do tipo. Na semana que você não disparar, não paga nada. Sem setup, sem manutenção, sem fidelidade.'
     },
     {
       p: 'Quantas mensagens consigo enviar por dia?',
-      r: 'Quantas você precisar. 1.000, 10.000 ou 50.000 no mesmo dia — a estrutura da API Oficial suporta. O volume é você quem define, disparo a disparo.'
+      r: 'Quantas você precisar. 1.000, 10.000 ou 50.000 no mesmo dia a estrutura da API Oficial suporta. O volume é você quem define, disparo a disparo.'
     },
     {
       p: 'Como funciona o pagamento?',
@@ -1456,7 +1604,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nome, tel, empresa, origem: 'landing-page' })
       });
-    } catch (_) { /* falha silenciosa — mostra popup de qualquer forma */ }
+    } catch (_) { /* falha silenciosa mostra popup de qualquer forma */ }
 
     const firstName = nome.split(' ')[0] || 'obrigado';
     modalTitle.textContent = `Recebido, ${firstName}!`;
@@ -1507,6 +1655,73 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       el.addEventListener('animationend', () => el.remove(), { once: true });
     }, 8000);
   }
+
+  // ── Clients Carousel ────────────────────────────────────────────────────────
+  (function() {
+    const track    = document.getElementById('clients-track');
+    const dotsWrap = document.getElementById('clients-dots');
+    const btnPrev  = document.getElementById('clients-prev');
+    const btnNext  = document.getElementById('clients-next');
+    if (!track) return;
+
+    const items = Array.from(track.children);
+    const total = items.length;
+    let current = 0;
+    let autoTimer;
+
+    function perView() {
+      return window.innerWidth < 640 ? 2 : window.innerWidth < 900 ? 3 : 4;
+    }
+
+    function itemWidth() {
+      const pv = perView();
+      const gap = 56;
+      const vw = track.parentElement.offsetWidth;
+      return (vw - gap * (pv - 1)) / pv;
+    }
+
+    function maxIndex() {
+      return Math.max(0, total - perView());
+    }
+
+    function render(idx) {
+      current = Math.max(0, Math.min(idx, maxIndex()));
+      const iw = itemWidth();
+      const gap = 56;
+      track.style.transform = `translateX(-${current * (iw + gap)}px)`;
+      items.forEach((item, i) => {
+        item.style.flex = `0 0 ${iw}px`;
+        item.style.width = `${iw}px`;
+      });
+      Array.from(dotsWrap.children).forEach((d, i) => {
+        d.classList.toggle('active', i === current);
+      });
+    }
+
+    // Build dots
+    for (let i = 0; i <= maxIndex(); i++) {
+      const dot = document.createElement('div');
+      dot.className = 'clients-dot' + (i === 0 ? ' active' : '');
+      dot.addEventListener('click', () => { resetAuto(); render(i); });
+      dotsWrap.appendChild(dot);
+    }
+
+    btnPrev.addEventListener('click', () => { resetAuto(); render(current - 1); });
+    btnNext.addEventListener('click', () => { resetAuto(); render(current + 1); });
+
+    function autoAdvance() {
+      render(current >= maxIndex() ? 0 : current + 1);
+    }
+
+    function resetAuto() {
+      clearInterval(autoTimer);
+      autoTimer = setInterval(autoAdvance, 4000);
+    }
+
+    render(0);
+    autoTimer = setInterval(autoAdvance, 4000);
+    window.addEventListener('resize', () => render(current));
+  })();
 
   // Evita acúmulo de timers ao voltar via bfcache
   window.addEventListener('pageshow', (e) => {
